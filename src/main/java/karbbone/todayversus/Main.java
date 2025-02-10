@@ -36,4 +36,19 @@ public class Main extends ListenerAdapter {
         }
         return token;
     }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        Message msg = event.getMessage();
+        if (msg.getContentRaw().equals("!hello")) {
+            MessageChannelUnion channel = event.getChannel();
+            channel.sendMessage("Hello guys! Check my poll:")
+                    .setPoll(
+                            MessagePollData.builder("Which programming language is better?")
+                                    .addAnswer("Java", Emoji.fromUnicode("😃"))
+                                    .addAnswer("Kotlin",Emoji.fromUnicode("😃"))
+                                    .build())
+                    .queue();
+        }
+    }
 }
