@@ -1,0 +1,39 @@
+package karbbone.todayversus;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.messages.MessagePollData;
+
+public class Main extends ListenerAdapter {
+
+    public static void main(String[] args) {
+        try {
+            String token = getEnvToken();
+            JDA jda = JDABuilder.createDefault(token)
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                    .addEventListeners(new Main())
+                    .build();
+
+            jda.awaitReady();
+            System.out.println("Bot is ready!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getEnvToken(){
+        String token = System.getenv("DISCORD_TOKEN");
+
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token Discord non défini ! Vérifie tes variables d'environnement.");
+            return null;
+        }
+        return token;
+    }
+}
