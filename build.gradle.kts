@@ -14,6 +14,7 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.xerial:sqlite-jdbc:3.49.0.0")
     implementation("net.dv8tion:JDA:5.3.0") { // replace $version with the latest version
         // Optionally disable audio natives to reduce jar size by excluding `opus-java`
         // Gradle DSL:

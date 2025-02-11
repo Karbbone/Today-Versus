@@ -1,5 +1,6 @@
 package karbbone.todayversus;
 
+import karbbone.todayversus.bdd.DatabaseManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -10,6 +11,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.messages.MessagePollData;
 
+import java.sql.SQLException;
+
 public class Main extends ListenerAdapter {
 
     public static void main(String[] args) {
@@ -19,11 +22,13 @@ public class Main extends ListenerAdapter {
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(new Main())
                     .build();
-
+            DatabaseManager.getInstance();
             jda.awaitReady();
             System.out.println("Bot is ready!");
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
