@@ -1,6 +1,7 @@
 package karbbone.todayversus.bdd;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * classe DatabaseManager singleton qui permet de gêré la base de données et initialisation
@@ -87,6 +88,27 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.out.println("Erreur lors de l'insertion des données : " + e.getMessage());
         }
+    }
+
+    public String[] getFirst() {
+        String sql = "SELECT * FROM poll WHERE id=1";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return new String[]{
+                        rs.getString("nom1"), rs.getString("emoji1"),
+                        rs.getString("nom2"), rs.getString("emoji2"),
+                        rs.getString("nom3"), rs.getString("emoji3"),
+                        rs.getString("nom4"), rs.getString("emoji4")
+                };
+            } else {
+                System.out.println("Aucune donnée trouvée pour l'ID 1.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la vérification des données : " + e.getMessage());
+        }
+        return new String[0];
     }
 
     public Connection getConnection() {

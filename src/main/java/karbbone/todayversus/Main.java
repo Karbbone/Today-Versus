@@ -15,6 +15,8 @@ import java.sql.SQLException;
 
 public class Main extends ListenerAdapter {
 
+    public static DatabaseManager inst;
+
     public static void main(String[] args) {
         try {
             String token = getEnvToken();
@@ -22,7 +24,7 @@ public class Main extends ListenerAdapter {
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(new Main())
                     .build();
-            DatabaseManager.getInstance();
+            inst = DatabaseManager.getInstance();
             jda.awaitReady();
             System.out.println("Bot is ready!");
         } catch (InterruptedException e) {
@@ -47,13 +49,20 @@ public class Main extends ListenerAdapter {
         Message msg = event.getMessage();
         if (msg.getContentRaw().equals("!hello")) {
             MessageChannelUnion channel = event.getChannel();
-            channel.sendMessage("Hello guys! Check my poll:")
-                    .setPoll(
-                            MessagePollData.builder("Which programming language is better?")
-                                    .addAnswer("Java", Emoji.fromUnicode("😃"))
-                                    .addAnswer("Kotlin",Emoji.fromUnicode("😃"))
-                                    .build())
-                    .queue();
+            try {
+                String[] pollData = DatabaseManager.getInstance().getFirst();
+                channel.sendMessage("Versus du jour !")
+                        .setPoll(
+                                MessagePollData.builder("Une préférence ?")
+                                        .addAnswer(pollData[0], Emoji.fromUnicode(pollData[1]))
+                                        .addAnswer(pollData[2], Emoji.fromUnicode(pollData[3]))
+                                        .addAnswer(pollData[4], Emoji.fromUnicode(pollData[5]))
+                                        .addAnswer(pollData[6], Emoji.fromUnicode(pollData[7]))
+                                        .build())
+                        .queue();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
