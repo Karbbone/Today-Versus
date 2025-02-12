@@ -1,6 +1,8 @@
 package karbbone.todayversus;
 
 import karbbone.todayversus.bdd.DatabaseManager;
+import karbbone.todayversus.dao.PollDao;
+import karbbone.todayversus.model.Poll;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -50,14 +52,14 @@ public class Main extends ListenerAdapter {
         if (msg.getContentRaw().equals("!hello")) {
             MessageChannelUnion channel = event.getChannel();
             try {
-                String[] pollData = DatabaseManager.getInstance().getFirst();
+                Poll firstPoll = new PollDao().findById(1);
                 channel.sendMessage("Versus du jour !")
                         .setPoll(
                                 MessagePollData.builder("Une préférence ?")
-                                        .addAnswer(pollData[0], Emoji.fromUnicode(pollData[1]))
-                                        .addAnswer(pollData[2], Emoji.fromUnicode(pollData[3]))
-                                        .addAnswer(pollData[4], Emoji.fromUnicode(pollData[5]))
-                                        .addAnswer(pollData[6], Emoji.fromUnicode(pollData[7]))
+                                        .addAnswer(firstPoll.getNom1(), Emoji.fromUnicode(firstPoll.getEmoji1()))
+                                        .addAnswer(firstPoll.getNom2(), Emoji.fromUnicode(firstPoll.getEmoji2()))
+                                        .addAnswer(firstPoll.getNom3(), Emoji.fromUnicode(firstPoll.getEmoji3()))
+                                        .addAnswer(firstPoll.getNom4(), Emoji.fromUnicode(firstPoll.getEmoji4()))
                                         .build())
                         .queue();
             } catch (SQLException e) {
